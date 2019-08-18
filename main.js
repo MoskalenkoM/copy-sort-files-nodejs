@@ -40,10 +40,10 @@ function parseDir(item) {
       throw err;
     }
     if (stats.isDirectory()) {
-      // directory
+      // directories
       checkDir(item);
     } else {
-      // file
+      // files
       const newInnerDir = distDir + path.sep + path.basename(item)[0];
       createDir(newInnerDir, { log: false });
       //
@@ -51,12 +51,12 @@ function parseDir(item) {
         if (err) {
           throw err;
         }
-        //
+        // write file
         fs.writeFile(newInnerDir + path.sep + path.basename(item), data, err => {
           if (err) {
             throw err;
           }
-          // a file was copied
+          // a file was copied and sorted
           console.log(`File ${path.basename(item)} was copied and sorted`);
         });
       });
