@@ -47,19 +47,16 @@ function parseDir(item) {
       const newInnerDir = distDir + path.sep + path.basename(item)[0];
       createDir(newInnerDir, { log: false });
       //
-      fs.readFile(item, (err, data) => {
-        if (err) {
-          throw err;
-        }
-        // write file
-        fs.writeFile(newInnerDir + path.sep + path.basename(item), data, err => {
-          if (err) {
-            throw err;
-          }
-          // a file was copied and sorted
-          console.log(`File ${path.basename(item)} was copied and sorted`);
-        });
+      const rs = fs.createReadStream(item, { encoding: 'utf8' });
+      const ws = fs.createWriteStream(newInnerDir + path.sep + path.basename(item));
+      //
+      rs.on('data', chunk => {
+        console.log(`${chunk.length} bytes - ${path.basename(item)}`);
+        rs.pipe(ws);
       });
+      // rs.on('end', () => {});
+      // ws.on('close', () => {});
+      //
       // delete file
       // fs.unlink(item, err => {
       //   if (err) throw err;
